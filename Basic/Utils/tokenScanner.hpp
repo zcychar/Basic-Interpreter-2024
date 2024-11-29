@@ -268,6 +268,7 @@ public:
     TokenType getTokenType(std::string token) const;
 
 /*
+ *
  * Method: getChar
  * Usage: int ch = scanner.getChar();
  * ----------------------------------

@@ -35,42 +35,39 @@ class Program;
  */
 
 class Statement {
-
 public:
+  /*
+   * Constructor: Statement
+   * ----------------------
+   * The base class constructor is empty.  Each subclass must provide
+   * its own constructor.
+   */
 
-/*
- * Constructor: Statement
- * ----------------------
- * The base class constructor is empty.  Each subclass must provide
- * its own constructor.
- */
+  Statement();
 
-    Statement();
+  /*
+   * Destructor: ~Statement
+   * Usage: delete stmt;
+   * -------------------
+   * The destructor deallocates the storage for this expression.
+   * It must be declared virtual to ensure that the correct subclass
+   * destructor is called when deleting a statement.
+   */
 
-/*
- * Destructor: ~Statement
- * Usage: delete stmt;
- * -------------------
- * The destructor deallocates the storage for this expression.
- * It must be declared virtual to ensure that the correct subclass
- * destructor is called when deleting a statement.
- */
+  virtual ~Statement();
 
-    virtual ~Statement();
+  /*
+   * Method: execute
+   * Usage: stmt->execute(state);
+   * ----------------------------
+   * This method executes a BASIC statement.  Each of the subclasses
+   * defines its own execute method that implements the necessary
+   * operations.  As was true for the expression evaluator, this
+   * method takes an EvalState object for looking up variables or
+   * controlling the operation of the interpreter.
+   */
 
-/*
- * Method: execute
- * Usage: stmt->execute(state);
- * ----------------------------
- * This method executes a BASIC statement.  Each of the subclasses
- * defines its own execute method that implements the necessary
- * operations.  As was true for the expression evaluator, this
- * method takes an EvalState object for looking up variables or
- * controlling the operation of the interpreter.
- */
-
-    virtual void execute(EvalState &state, Program &program) = 0;
-
+  virtual void execute(EvalState &state, Program &program) = 0;
 };
 
 
@@ -85,4 +82,81 @@ public:
  * specify its own destructor method to free that memory.
  */
 
+class REM : public Statement {
+public:
+  explicit REM();
+
+  void execute(EvalState &state, Program &program) override;
+
+private:
+  std::string value_;
+};
+
+class LET : public Statement {
+public:
+  explicit LET(Expression *expression);
+
+  void execute(EvalState &state, Program &program) override;
+
+  ~LET() override;
+
+private:
+  Expression *expression_;
+};
+
+class PRINT : public Statement {
+public:
+  explicit PRINT(Expression *expression);
+
+  void execute(EvalState &state, Program &program) override;
+
+  ~PRINT() override;
+
+private:
+  Expression *expression_;
+};
+
+class INPUT : public Statement {
+public:
+  explicit INPUT(Expression *expression);
+
+  void execute(EvalState &state, Program &program) override;
+
+  ~INPUT() override;
+
+private:
+  Expression *expression_;
+};
+
+class END : public Statement {
+public:
+  explicit END() = default;
+
+  void execute(EvalState &state, Program &program) override;
+};
+
+class GOTO : public Statement {
+public:
+  explicit GOTO(Expression *expression);
+
+  void execute(EvalState &state, Program &program) override;
+
+  ~GOTO() override;
+
+private:
+  Expression *expression_;
+};
+
+class IFTHEN:public Statement {
+public:
+  explicit IFTHEN(CompoundExp* expression,Expression* direction);
+
+  void execute(EvalState &state, Program &program) override;
+
+  ~IFTHEN() override;
+
+private:
+  CompoundExp* expression_;
+  Expression* direction_;
+};
 #endif
