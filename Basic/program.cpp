@@ -15,7 +15,11 @@
 
 Program::Program() = default;
 
-Program::~Program() = default;
+Program::~Program() {
+    for(auto it : parsed_storage) {
+        delete it.second;
+    }
+};
 
 void Program::clear() {
     // Replace this stub with your own code
@@ -49,6 +53,9 @@ void Program::setParsedStatement(int lineNumber, Statement *stmt) {
     // Replace this stub with your own code
     if(!line_storage.count(lineNumber)) {
         error(" LINE NUMBER ERROR");
+    }
+    if (parsed_storage.count(lineNumber)) {
+        delete parsed_storage[lineNumber];
     }
     TokenScanner scanner(line_storage[lineNumber]);
     scanner.ignoreWhitespace();
@@ -84,13 +91,12 @@ void Program::setParsedStatement(int lineNumber, Statement *stmt) {
             if(token=="THEN") {
                 int back_pos=scanner.getPosition();
                 Expression* direction=parseExp(scanner);
-                std::string subexp=line_storage[lineNumber].substr(front_pos,back_pos-front_pos-5);
+                std::string subexp=line_storage[lineNumber].substr(front_pos+1,back_pos-front_pos-6);
                 for(int i=0;i<subexp.length();++i) {
                     if(subexp[i]=='='||subexp[i]=='<'||subexp[i]=='>') {
-                        TokenScanner exp1(subexp.substr(0,i-1));
-                        TokenScanner exp2(subexp.substr(i+1,subexp.length()-1-i));
-                        CompoundExp* tmp=new CompoundExp(subexp.substr(i,1),parseExp(exp1),parseExp(exp2));
-                        stmt=new IFTHEN(tmp,direction);
+                        TokenScanner exp1(subexp.substr(0,i));
+                        TokenScanner exp2(subexp.substr(i+1));
+                        stmt=new IFTHEN(subexp[i],parseExp(exp1),parseExp(exp2),direction);
                         parsed_storage[lineNumber]=stmt;
                         return;
                     }
@@ -122,9 +128,9 @@ int Program::getFirstLineNumber() {
 
 int Program::getNextLineNumber(int lineNumber) {
     // Replace this stub with your own code
-    if(saved_next_line!=-1) {
+    if(saved_next_line!=-2) {
         int next_line=saved_next_line;
-        saved_next_line=-1;
+        saved_next_line=-2;
         return next_line;
     }
     auto it=std::next(line_storage.find(lineNumber));
@@ -134,10 +140,10 @@ int Program::getNextLineNumber(int lineNumber) {
 
 //more func to add
 void Program::setCurrentLine(int lineNumber) {
-    if(line_storage.count(lineNumber)) {
+    if(lineNumber==-1||line_storage.count(lineNumber)) {
         current_line=lineNumber;
     }else {
-        error("SYNTAX ERROR");
+        error("LINE NUMBER ERROR");
     }
 }
 

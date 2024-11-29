@@ -274,9 +274,9 @@ void TokenScanner::ungetChar(int ch) {
 /* Private methods */
 
 void TokenScanner::initScanner() {
-    ignoreWhitespaceFlag = false;
+    ignoreWhitespaceFlag = true;
     ignoreCommentsFlag = false;
-    scanNumbersFlag = false;
+    scanNumbersFlag = true;
     scanStringsFlag = false;
     operators = nullptr;
 }

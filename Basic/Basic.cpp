@@ -71,23 +71,23 @@ void processLine(std::string line, Program &program, EvalState &state) {
     }
   }else if(type == WORD) {
     if(token=="LET") {
-      Statement* tmp=new LET(parseExp(scanner));
-      tmp->execute(state,program);
+      LET tmp(parseExp(scanner));
+      tmp.execute(state,program);
     }else if(token=="INPUT") {
-      Statement* tmp=new INPUT(parseExp(scanner));
-      tmp->execute(state,program);
+      INPUT tmp(parseExp(scanner));
+      tmp.execute(state,program);
     }else if(token=="PRINT") {
-      Statement* tmp=new PRINT(parseExp(scanner));
-      tmp->execute(state,program);
+      PRINT tmp(parseExp(scanner));
+      tmp.execute(state,program);
     }else if(token=="RUN") {
       program.setCurrentLine(program.getFirstLineNumber());
       while(program.getCurrentLine()!=-1) {
         int lineNumber=program.getCurrentLine();
-        Statement* tmp=program.getParsedStatement(lineNumber);
-        if(tmp==nullptr) {
+        if(program.getParsedStatement(lineNumber)==nullptr) {
+          Statement* tmp;
           program.setParsedStatement(lineNumber,tmp);
         }
-        tmp->execute(state,program);
+        program.getParsedStatement(lineNumber)->execute(state,program);
         program.setCurrentLine(program.getNextLineNumber(lineNumber));
       }
     }else if(token=="LIST"){
@@ -96,9 +96,6 @@ void processLine(std::string line, Program &program, EvalState &state) {
       program.clear();
       state.Clear();
     }else if(token=="QUIT") {
-      std::string input;
-      getline(std::cin, input);
-      if(!input.empty())error("SYNTAX ERROR");
       exit(0);
     }else if(token=="HELP") {
       std::cout<<"THIS IS BASIC-INTERPRETED COMPLETED BY GuitarHero\n";

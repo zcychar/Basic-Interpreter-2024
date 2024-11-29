@@ -88,8 +88,6 @@ public:
 
   void execute(EvalState &state, Program &program) override;
 
-private:
-  std::string value_;
 };
 
 class LET : public Statement {
@@ -149,14 +147,16 @@ private:
 
 class IFTHEN:public Statement {
 public:
-  explicit IFTHEN(CompoundExp* expression,Expression* direction);
+  explicit IFTHEN(char op ,Expression* lhs,Expression* rhs, Expression *direction);
 
   void execute(EvalState &state, Program &program) override;
 
   ~IFTHEN() override;
 
 private:
-  CompoundExp* expression_;
+  char op;
+  Expression* lhs;
+  Expression* rhs;
   Expression* direction_;
 };
 #endif

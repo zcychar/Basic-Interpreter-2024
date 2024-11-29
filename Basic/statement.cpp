@@ -18,82 +18,96 @@ Statement::Statement() = default;
 
 Statement::~Statement() = default;
 
-REM::REM(){};
+REM::REM() {
+};
 
-void REM::execute(EvalState &state, Program &program) {}
+void REM::execute(EvalState &state, Program &program) {
+}
 
 
-LET::LET(Expression *expression):expression_(expression){}
+LET::LET(Expression *expression): expression_(expression) {
+}
 
 void LET::execute(EvalState &state, Program &program) {
- expression_->eval(state);
+  expression_->eval(state);
 }
 
 LET::~LET() {
- delete expression_;
+  delete expression_;
 }
 
-PRINT::PRINT(Expression *expression):expression_(expression) {}
+PRINT::PRINT(Expression *expression): expression_(expression) {
+}
 
 void PRINT::execute(EvalState &state, Program &program) {
- std::cout<<expression_->toString()<<"\n";
+  std::cout << expression_->eval(state) << "\n";
 }
 
 PRINT::~PRINT() {
- delete expression_;
+  delete expression_;
 }
 
 void END::execute(EvalState &state, Program &program) {
- program.setCurrentLine(-1);
+  program.save(-1);
 }
 
-INPUT::INPUT(Expression* expression):expression_(expression){}
+INPUT::INPUT(Expression *expression): expression_(expression) {
+}
 
 void INPUT::execute(EvalState &state, Program &program) {
- std::cout<<"?";
- std::string token;
- std::cin>>token;
- state.setValue(expression_->toString(),stringToInteger(token));
+  std::string token;
+
+  while (1) {
+    try {
+      getline(std::cin, token);
+      int value = stringToInteger(token);
+      std::cout << " ? ";
+      state.setValue(expression_->toString(), stringToInteger(token));
+      break;
+    } catch (ErrorException &ex) {
+      std::cout <<" ? INVALID NUMBER\n";
+    }
+  }
 }
 
 INPUT::~INPUT() {
- delete expression_;
+  delete expression_;
 }
 
-GOTO::GOTO(Expression *expression):expression_(expression){}
+GOTO::GOTO(Expression *expression): expression_(expression) {
+}
 
 void GOTO::execute(EvalState &state, Program &program) {
- program.save(expression_->eval(state));
+  program.save(expression_->eval(state));
 }
 
 GOTO::~GOTO() {
- delete expression_;
+  delete expression_;
 }
 
-IFTHEN::IFTHEN(CompoundExp *expression, Expression *direction):expression_(expression),direction_(direction) {}
+IFTHEN::IFTHEN(char op ,Expression* lhs,Expression* rhs, Expression *direction):op(op),lhs(lhs),rhs(rhs), direction_(direction) {
+}
 
 void IFTHEN::execute(EvalState &state, Program &program) {
- if(expression_->getOp()=="=") {
-  if(expression_->getLHS()->eval(state)==expression_->getRHS()->eval(state)) {
-   GOTO direction(direction_);
-   direction.execute(state,program);
+  if (op == '=') {
+    if (lhs->eval(state) == rhs->eval(state)) {
+      program.save(direction_->eval(state));
+    }
+  } else if (op == '<') {
+    if (lhs->eval(state) < rhs->eval(state)) {
+      program.save(direction_->eval(state));
+    }
+  } else if (op == '>') {
+    if (lhs->eval(state) > rhs->eval(state)) {
+      program.save(direction_->eval(state));
+    }
+  } else {
+    error("SYNTAX ERROR");
   }
- }else if(expression_->getOp()=="<") {
-  if(expression_->getLHS()->eval(state)<expression_->getRHS()->eval(state)) {
-   GOTO direction(direction_);
-   direction.execute(state,program);
-  }
- }else if(expression_->getOp()==">") {
-  if(expression_->getLHS()->eval(state)>expression_->getRHS()->eval(state)) {
-   GOTO direction(direction_);
-   direction.execute(state,program);
-  }
- }else {
-  error("SYNTAX ERROR");
- }
 }
 
 IFTHEN::~IFTHEN() {
- delete expression_;
- delete direction_;
+  delete lhs;
+  delete rhs;
+  delete direction_;
 }

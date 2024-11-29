@@ -152,7 +152,7 @@ private:
   std::map<int, std::string> line_storage;
   std::map<int, Statement*> parsed_storage;
   int current_line = -1;
-  int saved_next_line = -1;
+  int saved_next_line = -2;
 };
 
 #endif
