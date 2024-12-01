@@ -56,7 +56,7 @@ std::string Program::getSourceLine(int lineNumber) {
 void Program::setParsedStatement(int lineNumber, Statement *stmt) {
     // Replace this stub with your own code
     if(!line_storage.count(lineNumber)) {
-        error(" LINE NUMBER ERROR");
+        error("LINE NUMBER ERROR");
     }
     if (parsed_storage.count(lineNumber)) {
         delete parsed_storage[lineNumber];

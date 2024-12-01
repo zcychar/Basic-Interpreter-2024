@@ -15,14 +15,15 @@
  */
 
 Expression *parseExp(TokenScanner &scanner) {
+  Expression *exp=nullptr;
   try {
-    Expression *exp = readE(scanner);
+    exp = readE(scanner);
     if (scanner.hasMoreTokens()) {
-      delete exp;
       error("parseExp: Found extra token: " + scanner.nextToken());
   }
   return exp;
   } catch (ErrorException &ex) {
+    delete exp;
     error("SYNTAX ERROR");
   }
 }
