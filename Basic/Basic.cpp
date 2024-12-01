@@ -33,7 +33,7 @@ int main() {
       std::string input;
       getline(std::cin, input);
       if (input.empty())
-        continue;
+        return 0;
       processLine(input, program, state);
     } catch (ErrorException &ex) {
       std::cout << ex.getMessage() << std::endl;
