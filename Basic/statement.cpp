@@ -43,6 +43,10 @@ void PRINT::execute(EvalState &state, Program &program) {
   std::cout << expression_->eval(state) << "\n";
 }
 
+Expression* PRINT::getExpression(){
+  return expression_;
+};
+
 PRINT::~PRINT() {
   delete expression_;
 }
@@ -69,6 +73,10 @@ void INPUT::execute(EvalState &state, Program &program) {
     }
   }
 }
+
+Expression* INPUT::getExpression(){
+  return expression_;
+};
 
 INPUT::~INPUT() {
   delete expression_;

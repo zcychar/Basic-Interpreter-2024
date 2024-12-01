@@ -121,6 +121,8 @@ bool endsWith(std::string str, char suffix);
 
 std::string trim(std::string str);
 
+// bool identifier_check(std::string str);
+
 /* Private section */
 
 /**********************************************************************/

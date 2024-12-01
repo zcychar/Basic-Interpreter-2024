@@ -5,6 +5,7 @@
  */
 
 #include "exp.hpp"
+#include "Utils/strlib.hpp"
 
 
 /*
@@ -106,7 +107,7 @@ int CompoundExp::eval(EvalState &state) {
         if (lhs->getType() != IDENTIFIER) {
             error("Illegal variable in assignment");
         }
-        if (lhs->getType() == IDENTIFIER && lhs->toString() == "LET")
+        if (lhs->getType() == IDENTIFIER && lhs->toString()=="LET")
             error("SYNTAX ERROR");
         int val = rhs->eval(state);
         state.setValue(((IdentifierExp *) lhs)->getName(), val);
@@ -143,3 +144,4 @@ Expression *CompoundExp::getLHS() {
 Expression *CompoundExp::getRHS() {
     return rhs;
 }
+

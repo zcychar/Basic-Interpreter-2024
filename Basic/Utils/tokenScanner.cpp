@@ -100,14 +100,16 @@ std::string TokenScanner::nextToken() {
             isp->unget();
             return scanString();
         }
-        if (isdigit(ch) && scanNumbersFlag) {
-            isp->unget();
-            return scanNumber();
-        }
         if (isWordCharacter(ch)) {
             isp->unget();
             return scanWord();
         }
+        if (isdigit(ch) && scanNumbersFlag) {
+
+            isp->unget();
+            return scanNumber();
+        }
+
         std::string op = std::string(1, ch);
         while (isOperatorPrefix(op)) {
             ch = isp->get();
@@ -183,8 +185,12 @@ TokenType TokenScanner::getTokenType(std::string token) const {
     char ch = token[0];
     if (isspace(ch)) return SEPARATOR;
     if (ch == '"' || (ch == '\'' && token.length() > 1)) return STRING;
-    if (isdigit(ch)) return NUMBER;
-    if (isWordCharacter(ch)) return WORD;
+    if (isWordCharacter(ch)) {
+        for(int i=0;i<token.size();++i) {
+            if(!isdigit(token[i]))return WORD;
+        }
+        return NUMBER;
+    }
     return OPERATOR;
 };
 

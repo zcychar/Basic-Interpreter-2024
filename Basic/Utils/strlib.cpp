@@ -142,6 +142,16 @@ std::string trim(std::string str) {
     return str.substr(start, finish - start + 1);
 }
 
+// bool identifier_check(std::string &str) {
+//     const std::string identifier[]={"REM","LET","PRINT","INPUT","END","GOTO","IF","THEN","RUN","LIST","CLEAR","QUIT","HELP"};
+//     for(const auto& i:identifier) {
+//         if(str.find(i)) {
+//             return true;
+//         }
+//     }
+//     return false;
+// };
+
 /*
  * Implementation notes: readQuotedString and writeQuotedString
  * ------------------------------------------------------------

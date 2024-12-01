@@ -108,6 +108,8 @@ public:
 
   void execute(EvalState &state, Program &program) override;
 
+  Expression* getExpression();
+
   ~PRINT() override;
 
 private:
@@ -119,6 +121,8 @@ public:
   explicit INPUT(Expression *expression);
 
   void execute(EvalState &state, Program &program) override;
+
+  Expression* getExpression();
 
   ~INPUT() override;
 
