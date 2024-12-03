@@ -147,11 +147,10 @@ public:
 
   void getListedLine();
 
-
 private:
   // Fill this in with whatever types and instance variables you need
   std::map<int, std::string> line_storage;
-  std::map<int, Statement*> parsed_storage;
+  std::map<int, Statement *> parsed_storage;
   int current_line = -1;
   int saved_next_line = -2;
 };

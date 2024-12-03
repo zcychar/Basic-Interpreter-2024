@@ -43,7 +43,7 @@ void PRINT::execute(EvalState &state, Program &program) {
   std::cout << expression_->eval(state) << "\n";
 }
 
-Expression* PRINT::getExpression(){
+Expression *PRINT::getExpression() {
   return expression_;
 };
 
@@ -69,12 +69,12 @@ void INPUT::execute(EvalState &state, Program &program) {
       state.setValue(expression_->toString(), stringToInteger(token));
       break;
     } catch (ErrorException &ex) {
-      std::cout <<" ? INVALID NUMBER\n";
+      std::cout << " ? INVALID NUMBER\n";
     }
   }
 }
 
-Expression* INPUT::getExpression(){
+Expression *INPUT::getExpression() {
   return expression_;
 };
 
@@ -93,7 +93,8 @@ GOTO::~GOTO() {
   delete expression_;
 }
 
-IFTHEN::IFTHEN(char op ,Expression* lhs,Expression* rhs, Expression *direction):op(op),lhs(lhs),rhs(rhs), direction_(direction) {
+IFTHEN::IFTHEN(char op, Expression *lhs, Expression *rhs, Expression *direction): op(op), lhs(lhs), rhs(rhs),
+  direction_(direction) {
 }
 
 void IFTHEN::execute(EvalState &state, Program &program) {

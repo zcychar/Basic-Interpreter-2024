@@ -87,7 +87,6 @@ public:
   explicit REM();
 
   void execute(EvalState &state, Program &program) override;
-
 };
 
 class LET : public Statement {
@@ -108,7 +107,7 @@ public:
 
   void execute(EvalState &state, Program &program) override;
 
-  Expression* getExpression();
+  Expression *getExpression();
 
   ~PRINT() override;
 
@@ -122,7 +121,7 @@ public:
 
   void execute(EvalState &state, Program &program) override;
 
-  Expression* getExpression();
+  Expression *getExpression();
 
   ~INPUT() override;
 
@@ -149,9 +148,9 @@ private:
   Expression *expression_;
 };
 
-class IFTHEN:public Statement {
+class IFTHEN : public Statement {
 public:
-  explicit IFTHEN(char op ,Expression* lhs,Expression* rhs, Expression *direction);
+  explicit IFTHEN(char op, Expression *lhs, Expression *rhs, Expression *direction);
 
   void execute(EvalState &state, Program &program) override;
 
@@ -159,8 +158,8 @@ public:
 
 private:
   char op;
-  Expression* lhs;
-  Expression* rhs;
-  Expression* direction_;
+  Expression *lhs;
+  Expression *rhs;
+  Expression *direction_;
 };
 #endif
